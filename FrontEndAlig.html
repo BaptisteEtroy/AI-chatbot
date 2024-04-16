@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ali G Inspired Chatbot</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url("{{ url_for('static', filename='images/dealership.png') }}") no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: space-around; /* Spread items more evenly */
+            align-items: center;
+            flex-direction: row;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        #container {
+            display: flex;
+            justify-content: flex-start; /* Aligns items to the start of the container */
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        #ali-g-placeholder {
+            width: 398px; /* Smaller width for the image */
+            height: 627px;
+            margin-top: 150px;
+            margin-right: 200px;
+            flex-shrink: 0; /* Prevents the image from shrinking */
+        }
+
+        #chat-interface {
+            width: 100%;
+            max-width: 330px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+        }
+
+
+        #chat-output {
+            height: 300px;
+            width: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
+
+        #user-input {
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
+
+        #user-input {
+            width: calc(100% - 20px);
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="ali-g-placeholder" style="position: relative;">
+            <img id="ali-g" src="{{ url_for('static', filename='images/ali.png') }}" alt="Ali G">
+        </div>
+        <div id="chatbot-container">
+            <div id="chat-interface">
+                <div id="chat-output"></div>
+                <input type="text" id="user-input" placeholder="Wot u want...">
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const inputField = document.getElementById("user-input");
+            
+            inputField.addEventListener("keypress", async function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent the default form submit behavior
+                    const userMessage = inputField.value.trim();
+                    const chatOutput = document.getElementById("chat-output");
+                    
+                    if (userMessage !== "") {
+                        // Add the user's message to the chat output
+                        chatOutput.innerHTML += `<div style="margin-bottom: 8px;"><strong>You:</strong> ${userMessage}</div>`;
+                        
+                        try {
+                            // Send the message to your server and wait for the response
+                            const response = await fetch('/send_message', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ message: userMessage })
+                            });
+                            
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            const data = await response.json();
+                            
+                            // Add the Ali-G's response to the chat output
+                            chatOutput.innerHTML += `<div><strong>Ali-G:</strong> ${data.response}</div>`;
+                        } catch (error) {
+                            console.error("Failed to send message:", error);
+                            chatOutput.innerHTML += `<div><strong>Error:</strong> Could not send message.</div>`;
+                        }
+                        
+                        // Scroll to the bottom of the chat output to show new message
+                        chatOutput.scrollTop = chatOutput.scrollHeight;
+                        // Clear the input field
+                        inputField.value = "";
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
