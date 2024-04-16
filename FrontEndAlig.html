@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your EV Online</title>
+    <title>SpeedyWheels</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body, html {
             margin: 0;
             padding: 0;
             font-family: 'Roboto', sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: #ffffff;
+            color: #003366;
         }
 
         header, footer {
             text-align: center;
             padding: 20px 10px;
-            background-color: #1a1a1a;
+            background-color: #003366;
             color: white;
         }
 
         main {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
             padding: 20px;
         }
 
@@ -32,26 +32,10 @@
             background-color: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             border-radius: 8px;
-            margin: 20px;
+            margin: 10px;
             padding: 20px;
-            width: 80%;
+            width: calc(50% - 20px);
             max-width: 350px;
-            text-align: center;
-        }
-
-        .car img {
-            width: 100%;
-            border-radius: 8px;
-        }
-
-        .team {
-            display: flex;
-            justify-content: space-evenly;
-            width: 100%;
-            margin-top: 50px;
-        }
-
-        .team-member {
             text-align: center;
         }
 
@@ -64,6 +48,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             width: 300px;
             padding: 20px;
+            display: none; /* Start with the chat interface hidden */
         }
 
         #chat-output {
@@ -80,62 +65,87 @@
             box-sizing: border-box;
             border: 1px solid #ccc;
         }
+
+        .personality {
+            margin: 5px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .toggle-chatbot {
+            cursor: pointer;
+            position: fixed;
+            right: 20px;
+            bottom: 250px; /* Adjust as necessary */
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Your EV Online</h1>
+        <h1>SpeedyWheels</h1>
         <p>Explore our electric vehicles and chat with our bot for assistance!</p>
     </header>
-    
+
     <main>
         <div class="car">
-            <img src="car_image1.jpg" alt="Electric Car">
-            <h3>Model One</h3>
-            <p>Price: $35,000</p>
-            <p>Description of Model One, features, etc.</p>
+            <h3>Tesla Model S</h3>
+            <p>Price: $79,990</p>
         </div>
         <div class="car">
-            <img src="car_image2.jpg" alt="Electric Car">
-            <h3>Model Two</h3>
-            <p>Price: $45,000</p>
-            <p>Description of Model Two, features, etc.</p>
+            <h3>Audi e-tron</h3>
+            <p>Price: $65,900</p>
         </div>
-        
-        <div class="team">
-            <div class="team-member">
-                <h4>Baptiste</h4>
-                <p>Role: Sales Manager</p>
-            </div>
-            <div class="team-member">
-                <h4>Larbi</h4>
-                <p>Role: Technical Lead</p>
-            </div>
-            <div class="team-member">
-                <h4>Fynn</h4>
-                <p>Role: Customer Support</p>
-            </div>
+        <div class="car">
+            <h3>Porsche 911</h3>
+            <p>Price: $101,200</p>
         </div>
+        <div class="car">
+            <h3>Land Rover Evoque</h3>
+            <p>Price: $43,300</p>
+        </div>
+        <!-- Add more car listings as needed -->
     </main>
-    
+
     <footer>
-        <p>Contact us at info@yourevonline.com</p>
+        <p>Contact us at info@speedywheels.com</p>
     </footer>
-    
+
     <div id="chat-interface">
         <div id="chat-output"></div>
-        <input type="text" id="user-input" placeholder="Ask Ali G...">
+        <input type="text" id="user-input" placeholder="Ask our bot...">
+        <div>
+            <div class="personality" onclick="setPersonality('Friendly')">Friendly</div>
+            <div class="personality" onclick="setPersonality('Professional')">Professional</div>
+            <div class="personality" onclick="setPersonality('Casual')">Casual</div>
+            <div class="personality" onclick="setPersonality('Tech-savvy')">Tech-savvy</div>
+            <div class="personality" onclick="setPersonality('Humorous')">Humorous</div>
+        </div>
     </div>
 
+    <div class="toggle-chatbot" onclick="toggleChatbot()">Chat</div>
+
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const inputField = document.getElementById("user-input");
-            const chatOutput = document.getElementById("chat-output");
+        function toggleChatbot() {
+            var chatInterface = document.getElementById('chat-interface');
+            chatInterface.style.display = chatInterface.style.display === 'none' ? 'block' : 'none';
+        }
 
-            inputField.addEventListener("keypress", async function(event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    const userMessage = inputField.value.trim();
+        function setPersonality(personality) {
+            // Implementation for setting the chatbot's personality goes here
+            console.log("Personality set to:", personality);
+        }
 
-                    if (userMessage !== "") {
-                        chatOutput.innerHTML += `<div style="margin-bottom: 8px;"><strong>You
+        // When the page loads, we want the chatbot to be hidden
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('chat-interface').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
